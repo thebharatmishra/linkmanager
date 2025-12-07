@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Link Manager | Organize Your Links</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header>
+        <div class="header-content">
+          <div class="logo">
+            <i class="fas fa-link"></i>
+            <h1>Smart Link Manager</h1>
+          </div>
+          <p class="subtitle">Save, organize, and manage your links easily</p>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+          <div class="sidebar-section">
+            <h3><i class="fas fa-folder"></i> Groups</h3>
+            <div class="groups-list" id="groupsList">
+              <!-- Groups will be loaded here -->
+            </div>
+            <button class="btn btn-outline add-group-btn" id="addGroupBtn">
+              <i class="fas fa-plus"></i> New Group
+            </button>
+          </div>
+
+          <div class="sidebar-section">
+            <h3><i class="fas fa-chart-bar"></i> Statistics</h3>
+            <div class="stats-cards">
+              <div class="stat-card">
+                <i class="fas fa-link"></i>
+                <div>
+                  <span class="stat-number" id="totalLinks">0</span>
+                  <span class="stat-label">Total Links</span>
+                </div>
+              </div>
+              <div class="stat-card">
+                <i class="fas fa-folder"></i>
+                <div>
+                  <span class="stat-number" id="totalGroups">0</span>
+                  <span class="stat-label">Groups</span>
+                </div>
+              </div>
+              <div class="stat-card">
+                <i class="fas fa-clock"></i>
+                <div>
+                  <span class="stat-number" id="todayLinks">0</span>
+                  <span class="stat-label">Today</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sidebar-section">
+            <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+            <div class="quick-actions">
+              <button class="quick-action-btn" id="quickSave">
+                <i class="fas fa-save"></i>
+                <span>Save Links</span>
+              </button>
+              <button class="quick-action-btn" id="quickExport">
+                <i class="fas fa-file-export"></i>
+                <span>Export All</span>
+              </button>
+              <button class="quick-action-btn" id="quickClear">
+                <i class="fas fa-trash"></i>
+                <span>Clear All</span>
+              </button>
+              <button
+                class="quick-action-btn"
+                id="quickDuplicate"
+                style="background: #fef3c7; color: #d97706"
+              >
+                <i class="fas fa-copy"></i>
+                <span>Check Duplicates</span>
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main Area -->
+        <main class="content-area">
+          <!-- Input Section -->
+          <div class="input-section">
+            <div class="input-header">
+              <h2><i class="fas fa-paste"></i> Paste Your Links</h2>
+              <div class="input-tips">
+                <span class="tip"
+                  ><i class="fas fa-lightbulb"></i> Tip: Use "URL | Title"
+                  format for best results</span
+                >
+              </div>
+            </div>
+            <textarea
+              id="linkInput"
+              placeholder="Paste your links here (one per line or separated by commas)
+Example:
+https://www.youtube.com/watch?v=HHEQVXNCrW8 | Hacking WhatsApp Tracking
+https://www.geeksforgeeks.org/machine-learning/ | Machine Learning Tutorial"
+            ></textarea>
+
+            <div class="input-actions">
+              <button class="btn btn-primary" id="saveBtn">
+                <i class="fas fa-save"></i> Save Links
+              </button>
+              <button class="btn btn-secondary" id="parseBtn">
+                <i class="fas fa-magic"></i> Auto-Parse
+              </button>
+              <button class="btn btn-secondary" id="clearInputBtn">
+                <i class="fas fa-times"></i> Clear
+              </button>
+              <div class="input-shortcut">
+                <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to save
+              </div>
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <div class="controls">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Search links..."
+              />
+            </div>
+
+            <div class="filter-controls">
+              <select id="groupFilter">
+                <option value="all">All Groups</option>
+              </select>
+
+              <select id="sortFilter">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="title">Title A-Z</option>
+                <option value="domain">Domain</option>
+              </select>
+
+              <button class="btn btn-secondary" id="bulkActionsBtn">
+                <i class="fas fa-layer-group"></i> Bulk Actions
+              </button>
+            </div>
+          </div>
+
+          <!-- Links Container -->
+          <div class="links-container" id="linksContainer">
+            <div class="empty-state">
+              <i class="fas fa-link fa-4x"></i>
+              <h3>No links saved yet</h3>
+              <p>Start by pasting your links above</p>
+              <p class="empty-hint">Try pasting the links you provided!</p>
+            </div>
+          </div>
+        </main>
+      </div>
+
+      <!-- Footer -->
+      <footer>
+        <div class="footer-content">
+          <span>Made with <i class="fas fa-heart"></i> for link lovers</span>
+          <span class="footer-actions">
+            <button class="footer-btn" id="exportBtn">
+              <i class="fas fa-download"></i> Export
+            </button>
+            <button class="footer-btn" id="importBtn">
+              <i class="fas fa-upload"></i> Import
+            </button>
+            <button class="footer-btn" id="settingsBtn">
+              <i class="fas fa-cog"></i> Settings
+            </button>
+          </span>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="groupModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-folder-plus"></i> Create New Group</h3>
+          <button class="modal-close" id="closeGroupModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <input
+            type="text"
+            id="groupName"
+            placeholder="Enter group name"
+            class="modal-input"
+          />
+          <div class="color-picker">
+            <span>Choose color:</span>
+            <div class="colors">
+              <div class="color-option" data-color="#4f46e5"></div>
+              <div class="color-option" data-color="#10b981"></div>
+              <div class="color-option" data-color="#f59e0b"></div>
+              <div class="color-option" data-color="#ef4444"></div>
+              <div class="color-option" data-color="#8b5cf6"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="cancelGroup">Cancel</button>
+          <button class="btn btn-primary" id="createGroup">Create Group</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="bulkModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-layer-group"></i> Bulk Actions</h3>
+          <button class="modal-close" id="closeBulkModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="bulk-options">
+            <select id="bulkAction" class="modal-input">
+              <option value="">Select action</option>
+              <option value="move">Move to group</option>
+              <option value="delete">Delete selected</option>
+              <option value="group">Auto-group by domain</option>
+            </select>
+            <select
+              id="bulkTargetGroup"
+              class="modal-input"
+              style="display: none"
+            >
+              <option value="">Select target group</option>
+            </select>
+          </div>
+          <div class="selected-count">
+            <span id="selectedLinksCount">0</span> links selected
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="cancelBulk">Cancel</button>
+          <button class="btn btn-primary" id="applyBulk">Apply Action</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
